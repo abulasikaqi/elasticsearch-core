@@ -2,7 +2,7 @@ package org.elastic.common.es;
 
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +16,11 @@ public class ClientHelper {
 
 	private static TransportClient tcClient;
 
-	private static String url = "10.0.1.220";
+	private static String url = "localhost";
 
 	private static int port = 9300;
 
-	private static String clusterName = "my-application";
+	private static String clusterName = "elasticsearch";
 
 	private static Settings settings = Settings.builder()
 			.put("cluster.name", clusterName)
@@ -36,9 +36,9 @@ public class ClientHelper {
 			synchronized (ClientHelper.class) {
 				if (tcClient == null) {
 					try {
+						// 5.0 new InetSocketTransportAddress(InetAddress.getByName(url), port)
 						tcClient = new PreBuiltTransportClient(settings)
-                                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(url), port))
-                        ;
+                                .addTransportAddress(new TransportAddress(InetAddress.getByName(url), port));
 					} catch (UnknownHostException e) {
 						logger.error(e.getMessage());
 					}

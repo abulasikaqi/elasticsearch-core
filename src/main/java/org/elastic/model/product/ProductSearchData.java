@@ -2,6 +2,7 @@ package org.elastic.model.product;
 
 import org.elastic.common.es.QuerybuilderHelper;
 import lombok.Data;
+import org.elastic.search.SearchData;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * Created by LL on 2017/10/13.
  */
 @Data
-public class ProductSearchData {
+public class ProductSearchData extends SearchData {
 
     private List<String> mustProductName;
 
@@ -20,6 +21,7 @@ public class ProductSearchData {
 
     private List<String> mustNotProductName;
 
+    @Override
     public BoolQueryBuilder builder() {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 

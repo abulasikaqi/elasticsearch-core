@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.elastic.common.constants.Constants.PRODUCT_INDEX;
+import static org.elastic.common.constants.Constants.PRODUCT_INDEX_TYPE;
+
 /**
  * Created by LL on 2017/10/11.
  */
@@ -48,7 +51,7 @@ public class ProductController {
 
         List<Map> list = JSONObject.parseArray(indexData, Map.class);
 
-        String result = productService.batchAdd(list);
+        String result = productService.batchAdd(PRODUCT_INDEX, PRODUCT_INDEX_TYPE, list);
 
         logger.info(result);
 
@@ -71,7 +74,7 @@ public class ProductController {
 
         Map data = JSONObject.parseObject(indexData, Map.class);
 
-        String result = productService.add(data);
+        String result = productService.add(PRODUCT_INDEX, PRODUCT_INDEX_TYPE, data);
 
         logger.info(result);
 
@@ -113,7 +116,7 @@ public class ProductController {
         data.put("productName", productName);
 
         // 执行添加
-        String result = productService.add(data);
+        String result = productService.add(PRODUCT_INDEX, PRODUCT_INDEX_TYPE, data);
 
         logger.info(result);
 
@@ -145,7 +148,7 @@ public class ProductController {
 
         ProductSearchData data = JSONObject.parseObject(jsonStr, ProductSearchData.class);
 
-        String result = productService.searchProduct(data, from, pageSize, orderField, order);
+        String result = productService.searchProduct(PRODUCT_INDEX, PRODUCT_INDEX_TYPE, data, from, pageSize, orderField, order);
 
         logger.info(result);
         return result;
@@ -170,7 +173,7 @@ public class ProductController {
 //        Map<String, ?> data = JSONObject.parseObject(jsonData, Map.class);
         ProductInfo data = JSONObject.parseObject(jsonData, ProductInfo.class);
 
-        String result = productService.update(data);
+        String result = productService.update(PRODUCT_INDEX, PRODUCT_INDEX_TYPE, data);
 
         logger.info(result);
 
@@ -203,7 +206,7 @@ public class ProductController {
             return JSONObject.toJSONString(HttpResult.put(false, String.format("%s can't null!", error)));
         }
 
-        String result = productService.delete(productId, productType);
+        String result = productService.delete(PRODUCT_INDEX, PRODUCT_INDEX_TYPE, productId, productType);
 
         logger.info(result);
 

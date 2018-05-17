@@ -5,9 +5,9 @@ package org.elastic.common.constants;
  */
 public class Constants {
 
-    public final static String NJK_INDEX = "njk_es";
+    public final static String PRODUCT_INDEX = "product_index";
 
 
-    public final static String NJK_PRODUCT_TYPE = "here_product";
+    public final static String PRODUCT_INDEX_TYPE = "product_type";
 
 }

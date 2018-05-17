@@ -1,10 +1,11 @@
-package org.elastic.service.base;
+package org.elastic.search;
 
 import com.alibaba.fastjson.JSONObject;
 import org.elastic.common.es.ClientHelper;
 import org.elastic.common.util.CommonUtils;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -28,13 +29,13 @@ import java.util.Map;
  * 通用接口父类
  * Created by LL on 2017/10/11.
  */
-public class BaseService {
+public class BaseSearchService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseSearchService.class);
 
     private TransportClient client;
 
-    public BaseService() {
+    public BaseSearchService() {
         this.client = ClientHelper.getTcClient();
     }
 
@@ -104,7 +105,11 @@ public class BaseService {
      */
     protected String index(String indices, String indexType, Map<String, Object> source) {
         try {
-            return client.prepareIndex(indices, indexType).setSource(source).get().getId();
+            IndexRequestBuilder indexRequestBuilder = client.prepareIndex(indices, indexType).setSource(source);
+
+            logger.info("index |--> " + indexRequestBuilder.toString());
+
+            return indexRequestBuilder.get().getId();
         } catch (Exception e) {
             System.err.println(e.getMessage());
             logger.error(e.getMessage());
@@ -277,7 +282,8 @@ public class BaseService {
      */
     protected long bulkIndex(BulkRequest request) {
         try {
-            return client.bulk(request).get().getTookInMillis();
+            // 5.0 getTookInMillis();
+            return client.bulk(request).get().getIngestTookInMillis();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
